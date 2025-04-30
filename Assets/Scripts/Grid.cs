@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Grid<TGridObject>
 {
+    #region VARIABLES
     private int width;
     private int height;
     private float cellSize;
@@ -17,7 +18,9 @@ public class Grid<TGridObject>
         public int x;
         public int y;
     }
+    #endregion
 
+    #region CONSTRUCTOR
     public Grid(int width, int height, float cellSize, Vector3 originPosition, Func<Grid<TGridObject>, int, int, TGridObject> createGridObject)
     {
         this.width = width;
@@ -53,13 +56,31 @@ public class Grid<TGridObject>
             Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.black, 100f);
         }
     }
+    #endregion
+
+    #region GETTERS
+    internal int GetWidth()
+    {
+        return width;
+    }
+
+    internal int GetHeight()
+    {
+        return height;
+    }
+
+    internal float GetCellSize()
+    {
+        return cellSize;
+    }
+    #endregion
 
     private Vector3 GetWorldPosition(int x, int y)
     {
         return new Vector3(x, y) * cellSize + originPosition;
     }
 
-    private void GetXY(Vector3 worldPosition, out int x, out int y)
+    internal void GetXY(Vector3 worldPosition, out int x, out int y)
     {
         Vector3 newPosition = worldPosition - originPosition;
 
@@ -79,12 +100,9 @@ public class Grid<TGridObject>
 
     internal void TriggerGridObjectChanged(int x, int y, string debugViewValue = null)
     {
-        if (onGridObjectChanged != null)
-        {
-            onGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
-        }
+        onGridObjectChanged?.Invoke(this, new OnGridObjectChangedEventArgs { x = x, y = y });
 
-        if(debugViewValue != null && showDebugView)
+        if (debugViewValue != null && showDebugView)
         {
             debugTextArray[x, y].text = debugViewValue;
         }
@@ -97,7 +115,7 @@ public class Grid<TGridObject>
         SetGridObject(x, y, value);
     }
 
-    private TGridObject GetGridObject(int x, int y)
+    internal TGridObject GetGridObject(int x, int y)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
