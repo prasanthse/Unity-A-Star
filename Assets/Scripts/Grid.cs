@@ -10,7 +10,7 @@ public class Grid<TGridObject>
     private Vector3 originPosition;
     private TGridObject[,] gridArray;
     private TextMesh[,] debugTextArray;
-    private bool showDebugView = true;
+    private bool showDebugView = false;
 
     public event EventHandler<OnGridObjectChangedEventArgs> onGridObjectChanged;
     public class OnGridObjectChangedEventArgs: EventArgs
@@ -72,6 +72,11 @@ public class Grid<TGridObject>
     internal float GetCellSize()
     {
         return cellSize;
+    }
+
+    internal Vector3 GetOriginPosition()
+    {
+        return originPosition;
     }
     #endregion
 
